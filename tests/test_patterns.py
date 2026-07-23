@@ -42,3 +42,18 @@ def test_sha256_no_se_fragmenta_en_md5():
     assert _values(text, IndicatorType.MD5) == set()
     assert _values(text, IndicatorType.SHA1) == set()
     assert _values(text, IndicatorType.SHA256) == {text}
+
+
+def test_extrae_dominios():
+    text = "Trafico hacia malware-c2.ru y mail.google.com"
+    assert _values(text, IndicatorType.DOMAIN) == {"malware-c2.ru", "mail.google.com"}
+
+
+def test_descarta_nombres_de_archivo():
+    text = "Se ejecuto setup.exe, se abrio informe.pdf y cargo script.js"
+    assert _values(text, IndicatorType.DOMAIN) == set()
+
+
+def test_extension_en_mayusculas_tambien_se_descarta():
+    text = "Archivo SETUP.EXE en la carpeta"
+    assert _values(text, IndicatorType.DOMAIN) == set()
